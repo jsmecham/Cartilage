@@ -3,7 +3,7 @@
 @READWRITE = 2
 
 Function::property = (name, options = {}) ->
-  
+
   options.access ?= (READONLY | READWRITE)
   options.default ?= null
   options.internal_accessor ?= "_#{name}"
@@ -29,7 +29,7 @@ Function::property = (name, options = {}) ->
     configurable: no
     enumerable: yes
 
-  internal_config = 
+  internal_config =
     writeable: true
     get: getter
     set: setter
@@ -43,3 +43,9 @@ Function::property = (name, options = {}) ->
   Object.defineProperty @prototype, options.internal_accessor, internal_config
 
   @prototype[options.variable] = options.default
+
+Function::properties = (names, options = {}) ->
+
+  for name in names
+    clonedOptions = _.clone(options)
+    @property name, clonedOptions

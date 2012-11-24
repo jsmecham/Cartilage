@@ -64,7 +64,7 @@ test "should initialize property via super()", ->
     initialize: (options = {}) ->
       options.testProperty = "bar"
       super(options)
-      
+
   testView = new TestView
   equal testView.testProperty, "bar"
 
@@ -80,3 +80,25 @@ test "should clone default instead of returning directly when it is an object", 
 
   equal testView1.testProperty.foo, "baz"
   equal testView2.testProperty.foo, "bar"
+
+test "should initialize multiple properties", ->
+
+  class TestView extends Cartilage.View
+    @properties [ "testOne", "testTwo", "testThree" ]
+  testView = new TestView
+
+  ok not _.isUndefined(testView._testOne), "_testOne should not be undefined"
+  ok not _.isUndefined(testView._testTwo), "_testTwo should not be undefined"
+  ok not _.isUndefined(testView._testThree), "_testThree should not be undefined"
+  ok _.isNull(testView._testOne), "_testOne should be null"
+  ok _.isNull(testView._testTwo), "_testTwo should be null"
+  ok _.isNull(testView._testThree), "_testThree should be null"
+
+test "should initialize multiple properties with options", ->
+
+  class TestView extends Cartilage.View
+    @properties [ "testOne", "testTwo" ], default: "foobar"
+  testView = new TestView
+
+  equal testView.testOne, "foobar", "_testOne should be equal to 'foobar'"
+  equal testView.testTwo, "foobar", "_testTwo should be equal to 'foobar'"
